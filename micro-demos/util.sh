@@ -29,6 +29,13 @@ function prompt() {
     echo -n "$yellow\$ $reset"
 }
 
+function on_darwin() {
+    if [ $(uname -s) == "Darwin" ]; then
+	return true
+    fi
+    return false
+}
+
 started=""
 function maybe_first_prompt() {
     if [ -z "$started" ]; then
@@ -52,7 +59,12 @@ function run() {
       sleep 0.5
     fi
     OFILE="$(mktemp -t $(basename $0).XXXXXX)"
-    script -eq -c "$1" -f "$OFILE"
+    if [ on_darwin ]; then
+	script -q "$OFILE" $1
+    else
+	script -eq -c "$1" -f "$OFILE"
+    fi
+
     r=$?
     read -d '' -t "${timeout}" -n 10000 # clear stdin
     prompt
