@@ -15,6 +15,11 @@
 
 . $(dirname ${BASH_SOURCE})/../util.sh
 
+run "kubectl config use-context minikube"
+
+run "kubectl delete ns demos"
+run "kubectl create -f $(relative ../demo-namespace.yaml)"
+
 desc "Run a pod with an init container"
 run "cat $(relative nginx-init-containers.yaml)"
 run "kubectl --namespace=demos create -f $(relative nginx-init-containers.yaml)"
@@ -28,8 +33,4 @@ run "kubectl --namespace=demos expose pod nginx --type=NodePort"
 desc "Get service information via minikube"
 run "minikube service nginx --namespace=demos"
 
-desc "delete the service"
-run "kubectl delete svc nginx --namespace=demos"
-
-desc "delete the pod"
-run "kubectl delete pod nginx --namespace=demos"
+run "kubectl delete ns demos"

@@ -1,0 +1,4 @@
+Script started on Wed Jul 20 22:13:38 2016
+command: kubectl exec --namespace=demos web-0 -- sh -c echo vishnuk-macbookpro.roam.corp.google.com > /usr/share/nginx/html/index.html
+
+Script done on Wed Jul 20 22:13:39 2016
