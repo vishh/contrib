@@ -15,6 +15,9 @@
 
 . $(dirname ${BASH_SOURCE})/../util.sh
 
+run "kubectl delete ns demos"
+run "kubectl create -f $(relative ../demo-namespace.yaml)"
+
 desc "There is no quota"
 run "kubectl --namespace=demos get quota"
 
@@ -26,12 +29,12 @@ run "kubectl --namespace=demos describe quota demo-quota"
 desc "Create a large pod - should fail"
 run "cat $(relative pod1.yaml)"
 run "kubectl --namespace=demos create -f $(relative pod1.yaml)"
-run "kubectl --namespace=demos describe quota demo-quota"
+run "kubectl --namespace=demos describe pod quota-demo-large"
 
 desc "Create a pod with no limits - should fail"
 run "cat $(relative pod2.yaml)"
 run "kubectl --namespace=demos create -f $(relative pod2.yaml)"
-run "kubectl --namespace=demos describe quota demo-quota"
+run "kubectl --namespace=demos describe pod quota-demo-unspecified"
 
 desc "There are no default limits"
 run "kubectl --namespace=demos get limits"
@@ -44,4 +47,6 @@ run "kubectl --namespace=demos describe limits demo-limits"
 desc "Create a pod with no limits - should succeed now"
 run "cat $(relative pod2.yaml)"
 run "kubectl --namespace=demos create -f $(relative pod2.yaml)"
-run "kubectl --namespace=demos describe quota demo-quota"
+run "kubectl --namespace=demos describe pod quota-demo-unspecified"
+
+run "kubectl delete ns demos"
