@@ -52,7 +52,7 @@ run "kubectl exec -it --namespace=demos web-0 -- hostname"
 run "kubectl exec -it --namespace=demos web-1 -- hostname"
 
 desc "Discover its peers"
-run "kubectl run --image tutum/dnsutils --namespace=demos --restart=Never dns-test -- sleep 1000"
+run "kubectl run --image tutum/dnsutils --namespace=demos --restart=Never dns-test sleep 1000"
 run "kubectl exec --namespace=demos dns-test -- nslookup -type=srv nginx.demos"
 run "kubectl delete pods --namespace=demos dns-test"
 
