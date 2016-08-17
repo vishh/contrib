@@ -30,7 +30,8 @@ desc "Get nodes in the cluster"
 run "kubectl get nodes"
 
 desc "Get a list of failure domain labels from nodes"
-run "kubectl get nodes -o go-template='{{ range .items }}{{ .metadata.name }}, {{ index .metadata.labels \"failure-domain.beta.kubernetes.io/zone\" }}{{printf \"\\n\"}}{{ end }}'"
+run "kubectl get nodes -o yaml | grep zone"
+run "kubectl get nodes -o yaml | grep region"
 
 desc "delete the newly added node pool"
 run "gcloud container node-pools delete high-mem --cluster=multi-prod --zone us-central1-f"
