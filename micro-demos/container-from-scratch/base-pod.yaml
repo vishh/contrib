@@ -1,0 +1,32 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: ubuntu
+  name: ubuntu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ubuntu
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        run: ubuntu
+    spec:
+      containers:
+      - image: vish/container-demo@sha256:dfdad5abde805967f0831bbaceadf7ef96c24811b67f51fcf2519adf1374df0b
+        imagePullPolicy: Always
+        name: ubuntu
+        securityContext:
+          privileged: true
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        tty: true
+      restartPolicy: Always
+      
