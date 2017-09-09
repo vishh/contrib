@@ -16,14 +16,17 @@
 . $(dirname ${BASH_SOURCE})/../util.sh
 
 run "kubectl create -f $(relative ../demo-namespace.yaml)"
-run "kubectl delete -f $(relative base-pod.yaml) -n demos"
+kubectl delete -f $(relative base-pod.yaml) -n demos
 desc "Setup a test pod"
-run "kubectl replace -f $(relative base-pod.yaml) -n demos"
+run "cat ./base-pod.yaml"
+desc "Here's the Container Image specification (Dockerfile) for this demo"
+run "cat ./Dockerfile"
+run "kubectl create -f $(relative base-pod.yaml) -n demos"
 run "kubectl get po -n demos -w"
 
 desc "copy demo script to the pod and run the demo inside the pod"
-execCmd="kubectl exec -it -n demos $(kubectl get po -n demos -o name | xargs basename) --"
-run "kubectl cp ./inner-demo.sh demos/$(kubectl get po -n demos -o name | xargs basename):/micro-demos/container-demo/inner-demo.sh"
-run "$execCmd /micro-demos/container-demo/inner-demo.sh"  
+execCmd="kubectl exec -it -n demos $(kubectl get po -n demos -o name | xargs basename) -- /bin/sh -c"
+run "kubectl cp ./inner-demo.sh demos/$(kubectl get po -n demos -o name | xargs basename):/micro-demos/containers-from-scratch/inner-demo.sh"
+$execCmd "/micro-demos/containers-from-scratch/inner-demo.sh"
 
 run "kubectl delete ns demos"

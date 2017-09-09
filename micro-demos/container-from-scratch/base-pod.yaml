@@ -19,14 +19,24 @@ spec:
       labels:
         run: ubuntu
     spec:
+      volumes:
+        - name: os-release
+          hostPath:
+            path: /etc/os-release
       containers:
-      - image: vish/container-demo@sha256:dfdad5abde805967f0831bbaceadf7ef96c24811b67f51fcf2519adf1374df0b
+      - image: vish/container-from-scratch@sha256:98ed9651d8b3e39bd505fb52f6020f5889d99e5baed21b1050f9b67ad3ff6f90
+        volumeMounts:
+          - name: os-release
+            mountPath: /rootfs/etc/os-release
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 0.5
+            memory: 500Mi
         name: ubuntu
         securityContext:
           privileged: true
         stdin: true
-        terminationMessagePath: /dev/termination-log
         tty: true
       restartPolicy: Always
       
